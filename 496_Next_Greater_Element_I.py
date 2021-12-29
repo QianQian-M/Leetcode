@@ -43,6 +43,7 @@ class Solution:
         return next_greater_element
 
 # solution for O(n) ,n is nums2 array size
+
 class Solution:
     def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
         
