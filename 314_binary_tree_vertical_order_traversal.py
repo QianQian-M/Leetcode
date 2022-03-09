@@ -1,29 +1,38 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-from collections import defaultdict
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def verticalOrder(self, root: TreeNode) -> List[List[int]]:
-        if root is None:
-            return []
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        '''
+            1. sorting for final res
+            2. without sorting for final res
+        '''
+        if not root:return []
+        d ={}
         
-        columnTable = defaultdict(list)
-        # The core of this problem, the column index is from the middle
-        min_column = max_column = 0
-        queue = deque([(root, 0)])
-
-        while queue:
-            node, column = queue.popleft()
-
-            if node is not None:
-                columnTable[column].append(node.val)
-                min_column = min(min_column, column)
-                max_column = max(max_column, column)
-
-                queue.append((node.left, column - 1))
-                queue.append((node.right, column + 1))
-
-        return [columnTable[x] for x in range(min_column, max_column + 1)]
+        q = deque([(root,0)],)
+        
+        while q:
+            current, idx = q.popleft()
+            
+            if idx not in d:
+                d[idx]=[]
+            d[idx].append(current.val)
+            
+            if current.left:
+                q.append([(current.left),idx-1])
+            if current.right:
+                q.append([(current.right),idx+1])
+        
+        #         return [columnTable[x] for x in sorted(columnTable.keys())] from solution
+        # print(sorted(d.keys()))
+        res=[]
+        for x in sorted(d.items(), key= lambda x:x[0]):
+            res.append(x[1])
+            
+        return res
+                
+                
